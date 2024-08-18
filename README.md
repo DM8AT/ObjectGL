@@ -1,0 +1,2 @@
+# ObjectGL
+Object GL is a object-oriented wraper around OpenGL objects, like vertex buffers, index buffers, shader storage buffers, and so on. It is designed to work with new OpenGL-features, so a context version of 3.0 or greater is recomended, but not strictly necessery. 

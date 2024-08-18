@@ -19,8 +19,11 @@ OBJGL_FIL := $(OBGL_DIR)/ObjectGL.hpp $(OBGL_DIR)/ObjectGLGlobalState.hpp $(OBGL
 
 all: $(BIN)/$(EXECUTABLE)
 
-bin/main.o : $(SRC)/main.cpp $(OBJGL_OBJ)
+bin/main.o : $(SRC)/main.cpp $(BIN)/libObjectGL
 	$(CXX) -c $< -o $@ $(CXX_FLAGS)
+
+$(BIN)/libObjectGL: $(OBJGL_OBJ)
+	-ar rcs $(BIN)/libObjectGL $(OBJGL_OBJ)
 
 $(OBJ_DIR)/OGL_Instance.o: $(OBGL_DIR)/OGL_Instance.cpp $(OBGL_DIR)/ObjectGL.hpp $(OBGL_DIR)/ObjectGLGlobalState.hpp $(OBGL_DIR)/OGL_BaseState.cpp $(OBGL_DIR)/OGL_BindableBase.cpp $(OBGL_DIR)/OGL_Window.cpp
 	$(CXX) -c $< -o $@ $(CXX_FLAGS) $(OBJGL_FLAGS)
@@ -59,7 +62,7 @@ run: clean all
 	clear
 	./$(BIN)/$(EXECUTABLE)
 
-$(BIN)/$(EXECUTABLE): bin/main.o $(OBJGL_OBJ)
+$(BIN)/$(EXECUTABLE): bin/main.o $(BIN)/libObjectGL
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(EXECUTABLE) $(LIBRARIES)
 
 clean:

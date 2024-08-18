@@ -126,8 +126,6 @@ OGL_Texture::OGL_Texture(void* data, uint32_t width, uint32_t height, GLenum for
 
 void OGL_Texture::setTexture(const char* texFile, GLenum internalFormat)
 {
-    //make sure to initalise all formats
-    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG | IMG_INIT_AVIF | IMG_INIT_JXL | IMG_INIT_TIF | IMG_INIT_WEBP);
     //open the surface
     SDL_Surface* surf = IMG_Load(texFile);
     //check if the surface could load

@@ -1,7 +1,7 @@
 # ObjectGL
 Object GL is a object-oriented wraper around OpenGL objects, like vertex buffers, index buffers, shader storage buffers, and so on. It is designed to work with new OpenGL-features, so a context version of 3.0 or greater is recomended, but not strictly necessery. 
 # Downloading
-To download the library, move into a directory of your choise and run `git clone https://github.com/DM8AT/ObjectGL.git` to get the newest stable version of the library. After that, see the (the chapter about compilation)[#Compiling]. 
+To download the library, move into a directory of your choise and run `git clone https://github.com/DM8AT/ObjectGL.git` to get the newest stable version of the library. After that, see the [the chapter about compilation](#compiling). 
 # Compiling
 ## Dependencys
 To compile the library, a few other librarys need to be installed. They are:

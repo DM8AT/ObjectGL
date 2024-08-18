@@ -6,7 +6,7 @@ SRC		:= src
 INCLUDE	:= include
 LIB		:= lib
 
-LIBRARIES	:= -lGL -lGLEW -lSDL2 -lglfw -lSDL2_image
+LIBRARIES	:= -lGL -lGLEW -lSDL2 -lSDL2_image
 EXECUTABLE	:= main
 
 OBGL_DIR := $(SRC)/ObjectGL

@@ -22,6 +22,9 @@ all: $(BIN)/$(EXECUTABLE)
 bin/main.o : $(SRC)/main.cpp $(BIN)/libObjectGL
 	$(CXX) -c $< -o $@ $(CXX_FLAGS)
 
+libObjectGL: $(OBJGL_OBJ)
+	-ar rcs libObjectGL $(OBJGL_OBJ)
+
 $(BIN)/libObjectGL: $(OBJGL_OBJ)
 	-ar rcs $(BIN)/libObjectGL $(OBJGL_OBJ)
 

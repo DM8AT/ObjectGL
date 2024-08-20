@@ -1337,24 +1337,92 @@ class OGL_Texture : OGL_BindableBase
 {
 public:
 
+    /**
+     * @brief Construct a new texture
+     */
     OGL_Texture() = default;
 
+    /**
+     * @brief Construct a new texture
+     * 
+     * @param type the type of the texture
+     * @param width the width of the texture
+     * @param height the height of the texture
+     * @param layers the amount of layers for 3D textures
+     * @param internalFormat the internal format of the texture
+     */
     OGL_Texture(OGL_TextureType type, uint32_t width, uint32_t height, uint32_t layers, GLenum internalFormat = GL_RGBA32F);
 
+    /**
+     * @brief Construct a new texture
+     * 
+     * @param texFile the path to the texture
+     * @param internalFormat the internal format for the texture
+     */
     OGL_Texture(const char* texFile, GLenum internalFormat = GL_RGBA32F);
 
+    /**
+     * @brief Construct a new texture
+     * 
+     * @param texFiles the texture files for the textures
+     * @param type the type of the texture
+     * @param internalFormat the internal format for the texture
+     */
     OGL_Texture(std::vector<const char*> texFiles, OGL_TextureType type, GLenum internalFormat = GL_RGBA32F);
 
+    /**
+     * @brief Construct a new texture
+     * 
+     * @param data the data for the texture
+     * @param width the width of the texture
+     * @param height the height of the texture
+     * @param format the format of the data
+     * @param type the type of the data
+     * @param internalFormat the internal format for the texture
+     */
     OGL_Texture(void* data, uint32_t width, uint32_t height, GLenum format, GLenum type, GLenum internalFormat = GL_RGBA32F);
 
+    /**
+     * @brief update the texture
+     * 
+     * @param texFile the texture file to read
+     * @param internalFormat the internal format of the texture
+     */
     void setTexture(const char* texFile, GLenum internalFormat = GL_RGBA32F);
 
+    /**
+     * @brief update the texture
+     * 
+     * @param texFiles the texture files to read from
+     * @param type the type of the texture
+     * @param internalFormat the internal format of the texture
+     */
     void setTexture(std::vector<const char*> texFiles, OGL_TextureType type, GLenum internalFormat = GL_RGBA32F);
 
+    /**
+     * @brief update the texture
+     * 
+     * @param data the data for the texture
+     * @param width the width of the texture
+     * @param height the height of the texture
+     * @param format the format of the data
+     * @param type the type of the data
+     * @param internalFormat the internal format for the texture
+     */
     void setTexture(void* data, uint32_t width, uint32_t height, GLenum format, GLenum type, GLenum internalFormat = GL_RGBA32F);
 
+    /**
+     * @brief bind the texture to a specific unit
+     * 
+     * @param unit the unit to unbind from
+     */
     void bind(uint8_t unit);
 
+    /**
+     * @brief unbind the texture from a specific unit
+     * 
+     * @param unit the unit to unbind from
+     */
     void unbind(uint8_t unit);
 
     /**
@@ -1365,9 +1433,16 @@ public:
      */
     void setTexParameter(GLenum parameter, GLenum value);
 
+    /**
+     * @brief Create a mipmap for the texture
+     */
     void createMipmap();
 
 private:
+    /**
+     * @brief delete the object
+     */
+    virtual void onDestroy() override;
     /**
      * @brief store the type of the texture
      */

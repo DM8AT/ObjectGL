@@ -314,3 +314,13 @@ void OGL_Texture::createMipmap()
     //create the mip chain
     glGenerateMipmap(this->format);
 }
+
+void OGL_Texture::onDestroy()
+{
+    //make sure to bind the correct instance
+    correctInstanceBinding()
+    //delete the texture
+    glDeleteTextures(1, &this->texture);
+    //set the texture to 0
+    this->texture = 0;
+}

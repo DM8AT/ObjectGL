@@ -213,17 +213,6 @@ int main()
         20,21,22, 22,21,23
         });
 
-    OGL_Texture texture("src/cubeTexture.png");
-    texture.setTexParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    texture.setTexParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    texture.bind(0);
-
-    OGL_Shader shader = OGL_Shader("src/vertex.vs", "src/fragment.fs");
-    shader["tex"] = oglCreateUniformInfo<int>("tex", 0, OGL_TYPE_INT);
-    shader["lookup"] = oglCreateUniformInfo<int>("lookup", 1, OGL_TYPE_INT);
-    shader.recalculateUniforms();
-    shader.bind();
-
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glEnable(GL_CULL_FACE);
@@ -249,6 +238,32 @@ int main()
     Proj.upload();
     Proj.bind(1);
 
+    OGL_Texture colorTex = OGL_Texture(OGL_TEXTURE_2D, window.getWidth(), window.getHeight(), 0, GL_RGBA32F);
+    colorTex.setTexParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    colorTex.setTexParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    colorTex.setTexParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    colorTex.setTexParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    OGL_Texture depthTex = OGL_Texture(OGL_TEXTURE_2D, window.getWidth(), window.getHeight(), 0, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT); 
+    depthTex.setTexParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    depthTex.setTexParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    depthTex.setTexParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    depthTex.setTexParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    OGL_Framebuffer framebuff = OGL_Framebuffer({
+        OGL_FramebufferAttachment{&colorTex, 0, OGL_COLOR_ATTACHMENT, 0},
+        OGL_FramebufferAttachment{&depthTex, 0, OGL_DEPTH_ATTACHMENT, 0}
+    });
+
+    OGL_Texture texture("src/cubeTexture.png");
+    texture.setTexParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    texture.setTexParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    texture.bind(0);
+
+    OGL_Shader shader = OGL_Shader("src/vertex.vs", "src/fragment.fs");
+    shader["tex"] = oglCreateUniformInfo<int>("tex", 0, OGL_TYPE_INT);
+    shader["lookup"] = oglCreateUniformInfo<int>("lookup", 1, OGL_TYPE_INT);
+    shader.recalculateUniforms();
+    shader.bind();
+
     float a = 0.f;
     float b = 0.f;
     float c = 0.f;
@@ -263,9 +278,15 @@ int main()
         UBO.addElement<float>(window.getHeight() / (float)window.getWidth());
         UBO.upload();
 
+        framebuff.bind();
         oglHandleAllEvents();
+
         window.clear();
         glDrawElements(GL_TRIANGLES, IBO.getIndexCount(), GL_UNSIGNED_INT, 0);
+
+        framebuff.bind(GL_READ_FRAMEBUFFER);
+        framebuff.unbind(GL_DRAW_FRAMEBUFFER);
+        glBlitFramebuffer(0,0,window.getWidth(), window.getHeight(), 0,0,window.getWidth(), window.getHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         window.flip();
     }
 }

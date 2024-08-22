@@ -33,4 +33,6 @@ Here is a list of all features i am planing to add to this library:
 If you are missing a feature you'd love to have a wrapper for, create an issue using the "Feature Request" template and describe the feature according to the questions in the template. 
 
 ## Changelog
+Here you can look up what changed accross the versions. 
 Here is a list of all code related chages that happend after the last major release:
+- Added support for framebuffers

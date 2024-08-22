@@ -119,6 +119,28 @@ enum OGL_TextureType {
 };
 
 /**
+ * @brief store the type of attachment the seleced one is
+ */
+enum OGL_FramebufferAttachmentType {
+    /**
+     * @brief say that the texture should be used as a color attachment
+     */
+    OGL_COLOR_ATTACHMENT, 
+    /**
+     * @brief say that the texture should be used as a depth attachment
+     */
+    OGL_DEPTH_ATTACHMENT,
+    /**
+     * @brief say that the texture should be used as a stencil attachment
+     */
+    OGL_STENCIL_ATTACHMENT,
+    /**
+     * @brief a combination of depth and stencil attachment
+     */
+    OGL_DEPTH_STENCIL_ATTACHMENT
+};
+
+/**
  * @brief store an OpenGL instance and handle its creation and destruction
  */
 class OGL_Instance
@@ -1351,7 +1373,7 @@ public:
      * @param layers the amount of layers for 3D textures
      * @param internalFormat the internal format of the texture
      */
-    OGL_Texture(OGL_TextureType type, uint32_t width, uint32_t height, uint32_t layers, GLenum internalFormat = GL_RGBA32F);
+    OGL_Texture(OGL_TextureType type, uint32_t width, uint32_t height, uint32_t layers, GLenum internalFormat = GL_RGBA32F, GLenum format = GL_RGBA);
 
     /**
      * @brief Construct a new texture
@@ -1438,6 +1460,20 @@ public:
      */
     void createMipmap();
 
+    /**
+     * @brief Get the type of the texture
+     * 
+     * @return OGL_TextureType the texture type
+     */
+    inline OGL_TextureType getType() {return this->type;}
+
+    /**
+     * @brief Get the OpenGL texture
+     * 
+     * @return GLuint the OpenGL texture
+     */
+    inline GLuint getTexture() {return this->texture;}
+
 private:
     /**
      * @brief delete the object
@@ -1467,6 +1503,84 @@ private:
      * @brief store the amount of layers in the texture
      */
     uint32_t layers = 0;
+};
+
+/**
+ * @brief store the information about a single color attachment
+ */
+struct OGL_FramebufferAttachment
+{
+    /**
+     * @brief store a pointer to the texture to use
+     */
+    OGL_Texture* texture = 0;
+    /**
+     * @brief store the id of the attachment unit
+     */
+    uint8_t attachmentID = 0;
+    /**
+     * @brief store the type of attachment
+     */
+    OGL_FramebufferAttachmentType type = OGL_COLOR_ATTACHMENT;
+    /**
+     * @brief for layers and cube maps, selecte the layer to use
+     */
+    uint8_t layerSelect = 0;
+};
+
+/**
+ * @brief handle multiple framebuffers
+ */
+class OGL_Framebuffer : OGL_BindableBase
+{
+public:
+
+    /**
+     * @brief Construct a new framebuffer
+     */
+    OGL_Framebuffer() = default;
+
+    /**
+     * @brief Construct a new framebuffer
+     * 
+     * @param attachments the attachments for the framebuffer
+     */
+    OGL_Framebuffer(std::vector<OGL_FramebufferAttachment> attachments);
+
+    /**
+     * @brief update all the attachments bound to the framebuffer
+     */
+    void updateAttachmentBindings();
+
+    /**
+     * @brief access a specific framebuffer attachment
+     * @warning this operator dose not check if the element belongs to the framebuffer. If the index is out of range, this may lead to undefined behaviour
+     * 
+     * @param index the index of that attachment
+     * @return OGL_FramebufferAttachment& a reference of the attachment
+     */
+    inline OGL_FramebufferAttachment& operator[](size_t index) {return this->attachments[index];}
+
+    /**
+     * @brief bind the framebuffer
+     * 
+     * @param target the framebuffer type to bind to
+     */
+    void bind(GLenum target = GL_FRAMEBUFFER);
+
+    /**
+     * @brief unbind the framebuffer
+     * 
+     * @param target the framebuffer type to unbind from
+     */
+    void unbind(GLenum target = GL_FRAMEBUFFER);
+
+private:
+    virtual void onDestroy() override;
+
+    GLuint framebuffer;
+
+    std::vector<OGL_FramebufferAttachment> attachments;
 };
 
 //undefine the helper macros

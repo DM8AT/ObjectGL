@@ -14,8 +14,8 @@ OBJ_DIR := $(BIN)
 
 OBJGL_FLAGS := 
 
-OBJGL_OBJ := $(OBJ_DIR)/OGL_Instance.o $(OBJ_DIR)/OGL_Window.o $(OBJ_DIR)/OGL_BaseState.o $(OBJ_DIR)/OGL_BindableBase.o $(OBJ_DIR)/OGL_BaseFunctions.o $(OBJ_DIR)/OGL_Shader.o $(OBJ_DIR)/OGL_VertexAttributes.o $(OBJ_DIR)/OGL_UniformBuffer.o $(OBJ_DIR)/OGL_ShaderStorageBuffer.o $(OBJ_DIR)/OGL_IndexBuffer.o $(OBJ_DIR)/OGL_Texture.o
-OBJGL_FIL := $(OBGL_DIR)/ObjectGL.hpp $(OBGL_DIR)/ObjectGLGlobalState.hpp $(OBGL_DIR)/OGL_Instance.cpp $(OBGL_DIR)/OGL_Window.cpp $(OBGL_DIR)/OGL_BaseState.cpp $(OBGL_DIR)/OGL_BindableBase.cpp $(OBGL_DIR)/OGL_BaseFunctions.cpp $(OBGL_DIR)/OGL_Shader.cpp $(OBGL_DIR)/OGL_VertexAttributes.cpp $(OBGL_DIR)/OGL_UniformBuffer.cpp $(OBGL_DIR)/OGL_ShaderStorageBuffer.cpp $(OBGL_DIR)/OGL_IndexBuffer.cpp $(OBGL_DIR)/OGL_Texture.cpp
+OBJGL_OBJ := $(OBJ_DIR)/OGL_Instance.o $(OBJ_DIR)/OGL_Window.o $(OBJ_DIR)/OGL_BaseState.o $(OBJ_DIR)/OGL_BindableBase.o $(OBJ_DIR)/OGL_BaseFunctions.o $(OBJ_DIR)/OGL_Shader.o $(OBJ_DIR)/OGL_VertexAttributes.o $(OBJ_DIR)/OGL_UniformBuffer.o $(OBJ_DIR)/OGL_ShaderStorageBuffer.o $(OBJ_DIR)/OGL_IndexBuffer.o $(OBJ_DIR)/OGL_Texture.o $(OBJ_DIR)/OGL_Framebuffer.o
+OBJGL_FIL := $(OBGL_DIR)/ObjectGL.hpp $(OBGL_DIR)/ObjectGLGlobalState.hpp $(OBGL_DIR)/OGL_Instance.cpp $(OBGL_DIR)/OGL_Window.cpp $(OBGL_DIR)/OGL_BaseState.cpp $(OBGL_DIR)/OGL_BindableBase.cpp $(OBGL_DIR)/OGL_BaseFunctions.cpp $(OBGL_DIR)/OGL_Shader.cpp $(OBGL_DIR)/OGL_VertexAttributes.cpp $(OBGL_DIR)/OGL_UniformBuffer.cpp $(OBGL_DIR)/OGL_ShaderStorageBuffer.cpp $(OBGL_DIR)/OGL_IndexBuffer.cpp $(OBGL_DIR)/OGL_Texture.cpp $(OBGL_DIR)/OGL_Framebuffer.cpp
 
 all: $(BIN)/$(EXECUTABLE)
 
@@ -59,6 +59,9 @@ $(OBJ_DIR)/OGL_IndexBuffer.o: $(OBGL_DIR)/OGL_IndexBuffer.cpp $(OBGL_DIR)/OGL_Bi
 	$(CXX) -c $< -o $@ $(CXX_FLAGS) $(OBJGL_FLAGS)
 
 $(OBJ_DIR)/OGL_Texture.o: $(OBGL_DIR)/OGL_Texture.cpp $(OBGL_DIR)/OGL_BindableBase.cpp $(OBGL_DIR)/ObjectGL.hpp $(OBGL_DIR)/ObjectGLGlobalState.hpp $(OBGL_DIR)/OGL_BaseState.cpp
+	$(CXX) -c $< -o $@ $(CXX_FLAGS) $(OBJGL_FLAGS)
+
+$(OBJ_DIR)/OGL_Framebuffer.o: $(OBGL_DIR)/OGL_Framebuffer.cpp $(OBGL_DIR)/OGL_BindableBase.cpp $(OBGL_DIR)/ObjectGL.hpp $(OBGL_DIR)/ObjectGLGlobalState.hpp $(OBGL_DIR)/OGL_BaseState.cpp
 	$(CXX) -c $< -o $@ $(CXX_FLAGS) $(OBJGL_FLAGS)
 
 run: clean all

@@ -58,12 +58,16 @@ void addTextureCubemap(GLenum side, const char* texFile, uint32_t* width, uint32
     SDL_FreeSurface(formated);
 }
 
-OGL_Texture::OGL_Texture(OGL_TextureType type, uint32_t width, uint32_t height, uint32_t layers, GLenum internalFormat)
+OGL_Texture::OGL_Texture(OGL_TextureType type, uint32_t width, uint32_t height, uint32_t layers, GLenum internalFormat, GLenum format)
 {
     //create the texture
     glGenTextures(1, &this->texture);
     //store the type
     this->type = type;
+    //store the width
+    this->width = width;
+    //store the height
+    this->height = height;
 
     //switch over the type
     switch (type)
@@ -71,13 +75,17 @@ OGL_Texture::OGL_Texture(OGL_TextureType type, uint32_t width, uint32_t height, 
     case OGL_TEXTURE_2D:
         //store the type
         this->format = GL_TEXTURE_2D;
+        //bind the texture
+        this->bind(0);
         //create a clear 2D texture
-        glTexStorage2D(this->texture, layers, internalFormat, width, height);
+        glTexImage2D(this->format, 0, internalFormat, width, height, 0, format, GL_FLOAT, 0);
         break;
 
     case OGL_TEXTURE_CUBEMAP:
         //store the type
         this->format = GL_TEXTURE_CUBE_MAP;
+        //set the layers to 6
+        this->layers = 6;
         //bind the texture
         this->bind(0);
         //loop over all 6 faces
@@ -91,6 +99,8 @@ OGL_Texture::OGL_Texture(OGL_TextureType type, uint32_t width, uint32_t height, 
     case OGL_TEXTURE_ARRAY_2D:
         //store the type
         this->format = GL_TEXTURE_2D_ARRAY;
+        //store the layers
+        this->layers = layers;
         //make the format ready
         glTexStorage3D(this->texture, 1, internalFormat, width, height, layers);
         break;

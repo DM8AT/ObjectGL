@@ -9,8 +9,10 @@
  * 
  */
 
+//ask for access to the background library
+#define OGL_KEEP_BG_ACCESS
 //include the global state
-#include "ObjectGLGlobalState.hpp"
+#include "ObjectGL.hpp"
 
 //say that an instance class will exist
 class OGL_Instance;

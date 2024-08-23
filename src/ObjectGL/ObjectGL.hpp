@@ -27,8 +27,30 @@
 
 //check if the file this is included into should get access to the background dependencys
 #ifdef OGL_KEEP_BG_ACCESS
-//include the global state
-#include "ObjectGLGlobalState.hpp"
+
+//stdlib
+#include <cstdint>
+#include <memory>
+#include <vector>
+
+//say that an instance class will exist
+class OGL_Instance;
+//say that a window class will exist
+class OGL_Window;
+
+/**
+ * @brief store a pointer to the current instance
+ */
+extern OGL_Instance* oglCurrentInstance;
+/**
+ * @brief store a pointer to the current window
+ */
+extern OGL_Window* oglCurrentWindow;
+/**
+ * @brief store a vector of pointers to the instances
+ */
+extern std::vector<OGL_Instance*> oglAllInstances;
+
 #endif
 
 /**

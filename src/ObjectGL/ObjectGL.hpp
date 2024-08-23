@@ -425,6 +425,19 @@ public:
      */
     void flip();
 
+    /**
+     * @brief Set a function to call if the window is resized
+     * 
+     * @param func the function to call
+     * @param userData some abituary data that can be passed into the function
+     */
+    void setOnResizeHook(void (*func)(uint32_t, uint32_t, void*), void* userData = 0);
+
+    /**
+     * @brief Get the function the window calls if the window is resized
+     */
+    inline void (*getOnResizeHook())(uint32_t,uint32_t, void*) {return this->resizeFunc;}
+
 private:
     /**
      * @brief store a pointer to the instance
@@ -476,6 +489,14 @@ private:
      * @brief store the name of the window
      */
     const char* name;
+    /**
+     * @brief store a function that should be called if the window is resized
+     */
+    void (*resizeFunc)(uint32_t, uint32_t, void*) = 0;
+    /**
+     * @brief store some abituary data for the user that can be passed into the resize function
+     */
+    void* resizeFuncUserData = 0;
 };
 
 //a macro to ensure that the correct window is bound

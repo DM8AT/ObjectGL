@@ -158,6 +158,17 @@ void debugCallback(GLenum source, GLenum type, GLuint, GLenum severity, GLsizei,
     }
 }
 
+//function to call on window resize
+void onResize(uint32_t width, uint32_t height, void* userData)
+{
+    //re-interprete the user data as a texture array
+    OGL_Texture* textures = (OGL_Texture*)userData;
+    //call a resize on the first texture
+    textures[0].setTexture(0, width, height, GL_RGBA, GL_FLOAT, GL_RGBA16F);
+    //call a resize on the second texture
+    textures[1].setTexture(0, width, height, GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_COMPONENT24);
+}
+
 int main()
 {
     OGL_Instance instance(4.6, OGL_PROFILE_CORE);
@@ -213,6 +224,11 @@ int main()
         20,21,22, 22,21,23
         });
 
+    OGL_VertexBuffer<unsigned int> ppsVBO = OGL_VertexBuffer<unsigned int>({0,1,2,3});
+    OGL_VertexAttributes ppsVAO = OGL_VertexAttributes({
+        OGL_VertexAttribute{1, OGL_TYPE_UINT, false}
+    }, sizeof(unsigned int));
+
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glEnable(GL_CULL_FACE);
@@ -253,6 +269,9 @@ int main()
         OGL_FramebufferAttachment{&depthTex, 0, OGL_DEPTH_ATTACHMENT, 0}
     });
 
+    OGL_Texture framebufferTextures[] = {colorTex, depthTex};
+    window.setOnResizeHook(onResize, framebufferTextures);
+
     OGL_Texture texture("src/cubeTexture.png");
     texture.setTexParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     texture.setTexParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -262,13 +281,17 @@ int main()
     shader["tex"] = oglCreateUniformInfo<int>("tex", 0, OGL_TYPE_INT);
     shader["lookup"] = oglCreateUniformInfo<int>("lookup", 1, OGL_TYPE_INT);
     shader.recalculateUniforms();
-    shader.bind();
+
+    OGL_Shader ppsShader = OGL_Shader("src/postVertex.vs", "src/postFrag.fs");
+    ppsShader["mainBuff"] = oglCreateUniformInfo<int>("mainBuff", 0, OGL_TYPE_INT);
+    ppsShader.recalculateUniforms();
 
     float a = 0.f;
     float b = 0.f;
     float c = 0.f;
     while (!window.isClosingRequested())
     {
+        glEnable(GL_DEPTH_TEST);
         UBO.clear();
         updatePos(&UBO, pos);
         a = std::fmod(a + 0.002f, 2.0*M_PI);
@@ -282,11 +305,21 @@ int main()
         oglHandleAllEvents();
 
         window.clear();
+        shader.bind();
+        VBO.bind();
+        VAO.bind();
+        IBO.bind();
+        texture.bind(0);
         glDrawElements(GL_TRIANGLES, IBO.getIndexCount(), GL_UNSIGNED_INT, 0);
 
-        framebuff.bind(GL_READ_FRAMEBUFFER);
-        framebuff.unbind(GL_DRAW_FRAMEBUFFER);
-        glBlitFramebuffer(0,0,window.getWidth(), window.getHeight(), 0,0,window.getWidth(), window.getHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        framebuff.unbind();
+        glDisable(GL_DEPTH_TEST);
+        colorTex.bind(0);
+        ppsShader.bind();
+        ppsVBO.bind();
+        ppsVAO.bind();
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        colorTex.unbind(0);
         window.flip();
     }
 }

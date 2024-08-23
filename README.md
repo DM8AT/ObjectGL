@@ -36,3 +36,4 @@ If you are missing a feature you'd love to have a wrapper for, create an issue u
 Here you can look up what changed accross the versions. 
 Here is a list of all code related chages that happend after the last major release:
 - Added support for framebuffers
+- The window class supports a function that is called on the "Window Resize" event

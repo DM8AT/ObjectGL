@@ -78,6 +78,15 @@ void OGL_Window::makeCurrent()
     oglCurrentWindow = this;
 }
 
+//define the function that sets the resize hook
+void OGL_Window::setOnResizeHook(void (*func)(uint32_t,uint32_t,void*), void* userData)
+{
+    //store the resize hook
+    this->resizeFunc = func;
+    //store the user data
+    this->resizeFuncUserData = userData;
+}
+
 //define the function to handle events
 bool OGL_Window::handleEvent(SDL_Event event)
 {
@@ -103,6 +112,12 @@ bool OGL_Window::handleEvent(SDL_Event event)
         correctWindowBinding()
         //set the viewport
         glViewport(0,0, this->width, this->height);
+        //check if a resize hook is bound
+        if (this->resizeFunc)
+        {
+            //if it is, call it with the new width and height
+            (*this->resizeFunc)(this->width, this->height, this->resizeFuncUserData);
+        }
         break;
 
     default:

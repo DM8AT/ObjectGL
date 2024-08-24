@@ -248,7 +248,7 @@ bool OGL_Instance::handleEvent(SDL_Event event)
     for (OGL_Window* window : this->windows)
     {
         //pass the event. If it belongs to the window, store it and return
-        if (window->handleEvent(event)) { found = true; continue; }
+        if (window->handleEvent(event)) { found = true; break; }
     }
     //return if a window was found
     return found;

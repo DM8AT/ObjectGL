@@ -18,6 +18,7 @@ OBJGL_OBJ := $(OBJ_DIR)/OGL_Instance.o $(OBJ_DIR)/OGL_Window.o $(OBJ_DIR)/OGL_Ba
 OBJGL_FIL := $(OBGL_DIR)/ObjectGL.hpp $(OBGL_DIR)/OGL_Instance.cpp $(OBGL_DIR)/OGL_Window.cpp $(OBGL_DIR)/OGL_BaseState.cpp $(OBGL_DIR)/OGL_BindableBase.cpp $(OBGL_DIR)/OGL_BaseFunctions.cpp $(OBGL_DIR)/OGL_Shader.cpp $(OBGL_DIR)/OGL_VertexAttributes.cpp $(OBGL_DIR)/OGL_UniformBuffer.cpp $(OBGL_DIR)/OGL_ShaderStorageBuffer.cpp $(OBGL_DIR)/OGL_IndexBuffer.cpp $(OBGL_DIR)/OGL_Texture.cpp $(OBGL_DIR)/OGL_Framebuffer.cpp
 
 all: $(BIN)/$(EXECUTABLE)
+	-mkdir bin
 
 bin/main.o : $(SRC)/main.cpp $(BIN)/libObjectGL
 	$(CXX) -c $< -o $@ $(CXX_FLAGS)

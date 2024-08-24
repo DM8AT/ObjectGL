@@ -28,11 +28,6 @@
 //check if the file this is included into should get access to the background dependencys
 #ifdef OGL_KEEP_BG_ACCESS
 
-//stdlib
-#include <cstdint>
-#include <memory>
-#include <vector>
-
 //say that an instance class will exist
 class OGL_Instance;
 //say that a window class will exist

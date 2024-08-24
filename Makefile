@@ -12,7 +12,7 @@ EXECUTABLE	:= main
 OBGL_DIR := $(SRC)/ObjectGL
 OBJ_DIR := $(BIN)
 
-OBJGL_FLAGS := 
+OBJGL_FLAGS :=  
 
 CREATE_BIN := mkdir -p bin
 

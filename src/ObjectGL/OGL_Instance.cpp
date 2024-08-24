@@ -86,6 +86,19 @@ OGL_Instance::OGL_Instance(float version, OGL_ProfileType profile)
 //define the destructor
 OGL_Instance::~OGL_Instance()
 {
+    //loop over all bound bindables
+    for (size_t i = 0; i < this->bindables.size(); ++i)
+    {
+        //delete the bindable
+        delete this->bindables[i];
+    }
+
+    //loop over all bound windows
+    for (size_t i = 0; i < this->windows.size(); ++i)
+    {
+        //delete the window
+        delete this->windows[i];
+    }
     //store the ID of the instance
     size_t id = -1;
     //loop over all instances
@@ -116,21 +129,6 @@ OGL_Instance::~OGL_Instance()
         //set the current instance to 0
         oglCurrentInstance = 0;
     }
-
-    //loop over all bound bindables
-    for (size_t i = 0; i < this->bindables.size(); ++i)
-    {
-        //delete the bindable
-        delete this->bindables[i];
-    }
-
-    //loop over all bound windows
-    for (size_t i = 0; i < this->windows.size(); ++i)
-    {
-        //delete the window
-        delete this->windows[i];
-    }
-    
     //check if instances remain
     if (oglAllInstances.size() == 0)
     {

@@ -19,12 +19,6 @@ OGL_BindableBase::OGL_BindableBase()
 {
     //check if an instance is bound to the object. If it is, bind it
     if (this->instance != 0) {this->instance->makeCurrent();return;}
-    //check if a current instance exists
-    if (!oglCurrentInstance)
-    {
-        //throw an error
-        std::__throw_runtime_error("Can't create a window without creating an instance first");
-    }
     //check if an instance is bound
     if (oglCurrentInstance)
     {
@@ -33,8 +27,8 @@ OGL_BindableBase::OGL_BindableBase()
     }
     else
     {
-        //else, use the last created instance
-        this->instance = oglAllInstances[oglAllInstances.size()-1];
+        //throw an error
+        std::__throw_runtime_error("Can't create a window without creating an instance first");
     }
     //register this class to the instance
     this->instance->registerBindable(this);

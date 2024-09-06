@@ -1621,6 +1621,98 @@ private:
     std::vector<OGL_FramebufferAttachment> attachments;
 };
 
+class OGL_ComputeShader : OGL_BindableBase
+{
+public:
+
+    OGL_ComputeShader() = default;
+
+    OGL_ComputeShader(const char* input, OGL_ShaderInput type = OGL_SHADER_INPUT_FILE);
+
+
+    /**
+     * @brief change this shader to a new shader
+     * 
+     * @param cs the compute shader information, in the format specified by type
+     * @param type the type the data is given in, can be inputed as file, source or binary
+     */
+    void recompileShader(std::string cs, OGL_ShaderInput type = OGL_SHADER_INPUT_FILE);
+
+    /**
+     * @brief Get the Compiled Shader on the GPU
+     * 
+     * @return uint32_t the compiled OpenGL shader on the GPU
+     */
+    inline uint32_t getCompiledShader() {return this->shader;}
+
+    /**
+     * @brief bind the shader
+     */
+    void bind();
+
+    /**
+     * @brief unbind the shader
+     */
+    void unbind();
+
+    /**
+     * @brief Set the uniforms for the buffer
+     * 
+     * @param uniforms the uniforms for the shader
+     */
+    inline void setUniforms(std::vector<OGL_UniformInfo> uniforms) {this->uniforms = uniforms;}
+
+    /**
+     * @brief Get a pointer to all stored uniforms
+     * 
+     * @return std::vector<OGL_UniformInfo>* a pointer to the internal vector of uniforms
+     */
+    inline std::vector<OGL_UniformInfo>* getUniformPtr() {return &this->uniforms;}
+
+    /**
+     * @brief Get the amount of stored uniforms
+     * 
+     * @return size_t the amount of uniforms
+     */
+    inline size_t getUniformCount() {return this->uniforms.size();}
+
+    /**
+     * @brief get a specific uniform from the shader. If it dosn't exist, create it
+     * 
+     * @param name the name of the uniform
+     * @return OGL_UniformInfo& a reference to the uniform
+     */
+    OGL_UniformInfo& operator[](std::string name);
+
+    /**
+     * @brief get a specific uniform from the shader. If it dosn't exist, throw an error
+     * 
+     * @param index the index of the 
+     * @return OGL_UniformInfo& 
+     */
+    OGL_UniformInfo& operator[](size_t index);
+
+    /**
+     * @brief update the positions of all uniforms
+     */
+    void recalculateUniforms();
+
+private: 
+    /**
+     * @brief clean up the object after destruction
+     */
+    virtual void onDestroy() override;
+
+    /**
+     * @brief store the OpenGL shader
+     */
+    GLuint shader = 0;
+    /**
+     * @brief store information about all the uniforms
+     */
+    std::vector<OGL_UniformInfo> uniforms;
+};
+
 //undefine the helper macros
 #undef correctInstanceBinding
 

@@ -8,5 +8,5 @@ in vec2 f_tex;
 
 void main()
 {
-    color = texture(mainBuff, f_tex);
+    color = vec4(vec3(1) - texture(mainBuff, f_tex).rgb,1);
 }

@@ -29,7 +29,7 @@
  * 
  * @return int the compiled shader
  */
-int attachShader(GLint program, std::string source, GLenum type)
+static int attachShader(GLint program, std::string source, GLenum type)
 {
     //store the success tatus
     GLint status = 0;
@@ -82,7 +82,7 @@ int attachShader(GLint program, std::string source, GLenum type)
  * @param fss the fragment shader source code
  * @return GLuint the compiled shader on the GPU
  */
-GLuint compileShader(std::string vss, std::string fss)
+static GLuint compileShader(std::string vss, std::string fss)
 {
     //create the program
     GLuint prog = glCreateProgram();
@@ -141,7 +141,7 @@ GLuint compileShader(std::string vss, std::string fss)
  * @param file the file to read
  * @return std::string the read file
  */
-std::string readFile(std::string file)
+static std::string readFile(std::string file)
 {
     //open the file
     std::ifstream f(file.c_str());
